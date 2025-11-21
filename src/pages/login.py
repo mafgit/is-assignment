@@ -10,14 +10,11 @@ st.set_page_config("Login", initial_sidebar_state="collapsed")
 
 form = st.form("login")
 form.title("Hospital Dashboard Login")
-username = form.text_input("Username", key="username")
-password = form.text_input("Password", type="password", key="password")
+username = form.text_input("Username")
+password = form.text_input("Password", type="password")
 submitted = form.form_submit_button(label="Submit", width="stretch")
-
+form.warning("By continuing, you agree to our terms and conditions.")
 if submitted:
-    username = st.session_state["username"]
-    password = st.session_state["password"]
-
     error = ""
     if not isUsernameValid(username):
         error = "Username must be 3 to 20 characters long, containing only letters, numbers or underscores"
@@ -34,4 +31,5 @@ if submitted:
             st.session_state["username"] = username
             st.session_state["role"] = result["role"]
             st.session_state["user_id"] = result["user_id"]
+            st.session_state["consent_given"] = True
             st.switch_page("pages/dashboard.py")

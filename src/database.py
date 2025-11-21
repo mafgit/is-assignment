@@ -51,24 +51,37 @@ def setup():
 
 
 def insert_fake_data():
+    from encryption_utils import encrypt
+    from hash_utils import hash_password
+    
     queries = [
-        """
+        f"""
     INSERT INTO users (username, password, role) VALUES
-    ('admin', 'admin123', 'admin'),
-    ('Dr_Bob', 'doc123', 'doctor'),
-    ('Alice_recep', 'rec123', 'receptionist');
+    ('admin', '{hash_password('admin123')}', 'admin'),
+    ('Dr_Bob', '{hash_password('doc123')}', 'doctor'),
+    ('Alice_recep', '{hash_password('rec123')}', 'receptionist');
     """,
-        """
-    INSERT INTO patients (name, contact, diagnosis, anonymized_name, anonymized_contact) VALUES
-    ('John Doe', '123-456-7890', 'Flu', 'ANON_1001', 'XXX-XXX-7890'),
-    ('Jane Smith', '987-654-3210', 'Diabetes', 'ANON_1002', 'XXX-XXX-3210'),
-    ('Alice Johnson', '555-666-7777', 'Hypertension', 'ANON_1003', 'XXX-XXX-7777');
+        f"""
+    INSERT INTO patients (name, contact, diagnosis) VALUES
+    ('{encrypt('John Doe')}', '{encrypt('123-456-7890')}', 'Flu'),
+    ('{encrypt('Jane Smith')}', '{encrypt('987-654-3210')}', 'Diabetes'),
+    ('{encrypt('Alice Johnson')}', '{encrypt('555-666-7777')}', 'Hypertension');
     """,
     ]
 
     conn, cursor = get_conn_and_cursor()
-    for query in queries:
-        cursor.execute(query)
+    
+    try:
+        for query in queries:
+            print(query)
+            cursor.execute(query)
 
-    conn.commit()
-    conn.close()
+        conn.commit()
+    except Exception as e:
+        print(e)
+        conn.rollback()
+    finally:
+        conn.close()
+
+# setup()
+# insert_fake_data()

@@ -1,0 +1,44 @@
+import streamlit as st
+
+st.title("Hospital Dashboard")
+
+st.set_page_config("Home", initial_sidebar_state="collapsed")
+
+
+def ask_consent():
+    if "consent_given" not in st.session_state:
+        st.session_state.consent_given = False
+
+    if not st.session_state.consent_given:
+        
+        st.warning("This website collects personal data. By continuing, you agree to our terms and policy.")
+        if st.button("I Agree"):
+            st.session_state["consent_given"] = True
+            st.rerun()
+        else:
+            st.stop()
+
+
+ask_consent()
+
+if st.button("Go to Dashboard", width="stretch"):
+    st.switch_page("pages/dashboard.py")
+
+
+st.subheader("This project features:")
+st.write(
+    """- Fernet Encryption & Decryption         
+- Hashing
+- Masking
+- GDPR Policy
+- Date Retention Policy
+- Sqlite
+- Role-Based Access
+- Streamlit
+- Action Logging
+- Analytic Graph
+- Adding/Editing Patients
+- Navigation
+- Login/Logout
+"""
+)
