@@ -2,6 +2,8 @@
 
 ### Instructions/Steps:
 From root of codebase, do the following
+1. Make a virtual environment: `python -m venv venv`
+1. Create a new terminal OR write this command to activate it: `venv\Scripts\activate` (cmd) or `source venv\\Scripts\\activate` (bash)
 1. Run `pip install -r requirements.txt`
 1. Make `.env` file and add environment variable: `FERNET_KEY=FL412z9eXAQmFJSMhREWbAdr0FuIax4I-BDM-ezHzXA=` as an example
 1. Or generate a new key using `generate_key()` function in `src/encryption_utils.py`
