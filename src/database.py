@@ -83,5 +83,6 @@ def insert_fake_data():
     finally:
         conn.close()
 
-# setup()
-# insert_fake_data()
+def reset():
+    setup()
+    insert_fake_data()

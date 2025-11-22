@@ -5,7 +5,7 @@ import os
 load_dotenv()
 
 
-def _generate_key():
+def generate_key():
     print(Fernet.generate_key().decode())  # to save in .env
 
 
