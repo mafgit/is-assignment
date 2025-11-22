@@ -16,14 +16,14 @@ if not isLoggedIn(st.session_state):
 # st.session_state["username"] = "Mr_Bob"
 
 
-st.set_page_config("Dashboard", initial_sidebar_state="collapsed")
+st.set_page_config("Dashboard", page_icon=":material/dashboard:", initial_sidebar_state="collapsed")
 
 ask_consent()
 
 # header
 left, right = st.columns([0.83, 0.17], vertical_alignment="center")
 with left:
-    st.title("Hospital Dashboard", width="stretch")
+    st.title(":material/dashboard: Hospital Dashboard", width="stretch")
 with right:
     logout_btn = st.button("Logout", width="stretch", type="primary", icon=":material/logout:")
     if logout_btn:
@@ -37,7 +37,7 @@ username = st.session_state["username"]
 
 left, right = st.columns([0.85, 0.15], vertical_alignment="center")
 with left:
-    st.header(f"Hey {username}!")
+    st.markdown(f"### *Hey {username}!*")
 with right:
     # badge color
     if role == "admin":
@@ -138,7 +138,7 @@ def show_tables():
         sync_btn = st.button("Sync", icon=":material/refresh:")
         if sync_btn:
             st.rerun(scope="fragment")
-    if role == 'admin':
+    if role == "admin":
         with middle:
             if role == "admin":
                 anonymize_btn = st.button("Anonymize", icon=":material/grid_3x3_off:")
@@ -156,19 +156,22 @@ def show_tables():
                     st.error("There was an error deleting old data")
 
     patients = get_patients(role)
-    st.subheader("Patients")
+    st.subheader(":material/patient_list: Patients")
     st.dataframe(patients)
 
     if role == "admin":
         logs = get_logs()
-        st.subheader("Logs")
+        st.subheader(":material/call_received: Logs")
         st.dataframe(logs)
 
         # analytics
-        logs["timestamp"] = pd.to_datetime(logs["timestamp"])
-        logs.groupby([logs["timestamp"].dt.date, 'action']).size().reset_index()
-
-        figure = px.bar(logs, x="timestamp", y="action" ,barmode="group", title="Activity per day")
+        st.subheader(":material/analytics: Analytics")
+        logs["timestamp"] = pd.to_datetime(logs["timestamp"])  # convert to actual timestamp format
+        date_part_only = logs["timestamp"].dt.date
+        grouped = logs.groupby([date_part_only, "action"]).size().reset_index(name="count")
+        # size() counts count for each group, reset_index() converts to dataframe
+        grouped.rename(columns={"timestamp": "date"}, inplace=True)
+        figure = px.bar(grouped, x="date", y="count", color="action", barmode="group", title="Activity per day")
         st.plotly_chart(figure)
 
     # last synchronized

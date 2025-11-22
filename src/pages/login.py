@@ -9,11 +9,11 @@ if isLoggedIn(st.session_state):
 st.set_page_config("Login", initial_sidebar_state="collapsed")
 
 form = st.form("login")
-form.title("Hospital Dashboard Login")
+form.title(":material/local_hospital: Hospital Dashboard Login")
 username = form.text_input("Username")
 password = form.text_input("Password", type="password")
-submitted = form.form_submit_button(label="Submit", width="stretch")
-form.warning("By continuing, you agree to our terms and conditions.")
+submitted = form.form_submit_button(label="Login",icon=":material/login:", width="stretch")
+form.warning("This website collects personal data and has data retention policy of 365 days. By continuing, you agree to our terms and policy.")
 if submitted:
     error = ""
     if not isUsernameValid(username):
